@@ -3,8 +3,6 @@ import { useAuth } from '../context/AuthContext';
 import ProtectedRoute from '../components/common/ProtectedRoute';
 import PublicRoute from '../components/common/PublicRoute';
 import Navbar from '../components/layout/Navbar';
-
-// Auth pages
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import RegisterStudent from '../pages/auth/RegisterStudent';
@@ -14,42 +12,25 @@ import RegisterHostelOffice from '../pages/auth/RegisterHostelOffice';
 import RegisterGate from '../pages/auth/RegisterGate';
 import VerifyOTP from '../pages/auth/VerifyOTP';
 import ForgotPassword from '../pages/auth/ForgotPassword';
-
-// Home page
 import Home from '../pages/Home';
-
-// Student pages
 import StudentDashboard from '../pages/student/StudentDashboard';
 import CreatePass from '../pages/student/CreatePass';
 import OutOfStationPass from '../pages/student/OutOfStationPass';
 import MyPasses from '../pages/student/MyPasses';
-
-// Department pages
 import DepartmentDashboard from '../pages/department/DepartmentDashboard';
 import DepartmentPending from '../pages/department/PendingPasses';
 import DepartmentStudentLeaves from '../pages/department/StudentLeaves';
-
-// Academic pages
 import AcademicDashboard from '../pages/academic/AcademicDashboard';
 import AcademicPending from '../pages/academic/PendingPasses';
 import AcademicStudentLeaves from '../pages/academic/StudentLeaves';
-
-// Hostel pages
 import HostelDashboard from '../pages/hostel/HostelDashboard';
 import HostelPending from '../pages/hostel/PendingPasses';
-
-// Gate pages
 import GateDashboard from '../pages/gate/GateDashboard';
 import GateScanner from '../pages/gate/Scanner';
 
-/**
- * AppRoutes Component
- * Defines all routes in the application with role-based protection
- */
 const AppRoutes = () => {
   return (
     <Routes>
-      {/* Public Routes - Always accessible without authentication */}
       <Route
         path="/"
         element={
@@ -130,8 +111,6 @@ const AppRoutes = () => {
           </PublicRoute>
         }
       />
-
-      {/* Protected Routes - Student */}
       <Route
         path="/student/dashboard"
         element={
@@ -168,8 +147,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Protected Routes - Department */}
       <Route
         path="/department/dashboard"
         element={
@@ -197,8 +174,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Protected Routes - Academic */}
       <Route
         path="/academic/dashboard"
         element={
@@ -226,8 +201,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Protected Routes - Hostel Office */}
       <Route
         path="/hostel/dashboard"
         element={
@@ -246,8 +219,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-      {/* Protected Routes - Gate */}
       <Route
         path="/gate/dashboard"
         element={
@@ -266,9 +237,6 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
-
-      {/* 404 - Not Found */}
       <Route
         path="*"
         element={

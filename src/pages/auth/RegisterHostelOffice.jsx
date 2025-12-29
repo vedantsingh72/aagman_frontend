@@ -4,7 +4,6 @@ import {
   User, 
   Mail,
   Home as HomeIcon,
-  Building2,
   Hash,
   Lock, 
   ArrowRight, 
@@ -17,13 +16,11 @@ import {
   Key
 } from 'lucide-react';
 import { registerHostelOffice } from '../../services/auth.service';
-import { DEPARTMENTS } from '../../utils/constants';
 
 const RegisterHostelOffice = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    department: '',
     officeId: '',
     password: '',
     confirmPassword: '',
@@ -50,13 +47,11 @@ const RegisterHostelOffice = () => {
     e.preventDefault();
     setError('');
 
-    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
-    // Validate password length
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
@@ -66,6 +61,7 @@ const RegisterHostelOffice = () => {
 
     try {
       const { confirmPassword, ...registerData } = formData;
+      delete registerData.department;
       
       const response = await registerHostelOffice(registerData);
       
@@ -93,7 +89,6 @@ const RegisterHostelOffice = () => {
     }
   };
 
-  // Helper for Input Fields - Using useCallback to create stable reference
   const InputField = useCallback(({ name, type = "text", placeholder, icon: Icon, value, onChange, required = true }) => {
     return (
       <div 
@@ -121,19 +116,13 @@ const RegisterHostelOffice = () => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 relative overflow-hidden bg-[#0A0F1E] font-sans">
-      
-      {/* --- BACKGROUND AMBIENCE --- */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-900/20 via-[#0A0F1E] to-[#0A0F1E]"></div>
         <div className="absolute top-[10%] right-[10%] w-[600px] h-[600px] bg-amber-600/10 rounded-full blur-[120px] animate-pulse-slow"></div>
         <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-orange-600/10 rounded-full blur-[120px] animate-pulse-slow delay-1000"></div>
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 mix-blend-overlay"></div>
       </div>
-
-      {/* --- MAIN GLASS CARD --- */}
       <div className="relative z-10 w-full max-w-6xl bg-slate-900/40 backdrop-blur-2xl border border-white/10 rounded-3xl shadow-[0_0_50px_0_rgba(0,0,0,0.3)] flex overflow-hidden min-h-[700px]">
-        
-        {/* --- LEFT SIDE: FORM --- */}
         <div className="w-full lg:w-3/5 p-8 md:p-10 flex flex-col justify-center relative bg-slate-900/30">
           
           <div className="mb-8">
@@ -154,8 +143,6 @@ const RegisterHostelOffice = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            
-            {/* 1. Full Name */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Full Name</label>
               <InputField 
@@ -166,8 +153,6 @@ const RegisterHostelOffice = () => {
                 onChange={handleChange} 
               />
             </div>
-
-            {/* 2. Email */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Email</label>
               <InputField 
@@ -179,47 +164,16 @@ const RegisterHostelOffice = () => {
                 onChange={handleChange} 
               />
             </div>
-
-            {/* 3. Department & Office ID Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Department Select */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Department</label>
-                <div className={`relative group transition-all duration-300 rounded-xl border ${focusedField === 'department' ? 'border-orange-500 bg-slate-800/80' : 'border-slate-700 bg-slate-800/40 hover:bg-slate-800/60'}`}>
-                  <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-300 ${focusedField === 'department' ? 'text-orange-400' : 'text-slate-500'}`}>
-                    <Building2 size={18} />
-                  </div>
-                  <select
-                    name="department"
-                    value={formData.department}
-                    onChange={handleChange}
-                    onFocus={() => setFocusedField('department')}
-                    onBlur={() => setFocusedField(null)}
-                    className="w-full bg-transparent text-white rounded-xl py-3.5 pl-11 pr-4 focus:outline-none appearance-none text-sm cursor-pointer"
-                    required
-                  >
-                    <option value="" className="bg-slate-900 text-slate-500">Select Dept</option>
-                    {DEPARTMENTS.map((dept) => (
-                      <option key={dept} value={dept} className="bg-slate-900 text-white">{dept}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Office ID */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Office ID</label>
-                <InputField 
-                  name="officeId" 
-                  placeholder="HOSTEL001" 
-                  icon={Hash} 
-                  value={formData.officeId} 
-                  onChange={handleChange} 
-                />
-              </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Office ID</label>
+              <InputField 
+                name="officeId" 
+                placeholder="HOSTEL001" 
+                icon={Hash} 
+                value={formData.officeId} 
+                onChange={handleChange} 
+              />
             </div>
-
-            {/* 4. Password Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Password</label>
@@ -257,8 +211,6 @@ const RegisterHostelOffice = () => {
                 />
               </div>
             </div>
-
-            {/* 5. Authorization Code */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-slate-300 ml-1 uppercase tracking-wider">Authorization Code</label>
               <InputField 
@@ -297,11 +249,7 @@ const RegisterHostelOffice = () => {
             </p>
           </div>
         </div>
-
-        {/* --- RIGHT SIDE: VISUAL (Hidden on Mobile) --- */}
         <div className="hidden lg:flex w-2/5 bg-gradient-to-bl from-orange-900/40 to-slate-900/40 relative items-center justify-center p-12 overflow-hidden border-l border-white/5">
-          
-          {/* Animated Background Elements */}
           <div className="absolute top-0 right-0 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
           
           <div className="relative z-10 flex flex-col items-center text-center">

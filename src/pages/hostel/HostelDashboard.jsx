@@ -14,7 +14,6 @@ import { getPendingPasses } from '../../services/hostel.service';
 import Loading from '../../components/common/Loading';
 import ErrorMessage from '../../components/common/ErrorMessage';
 
-// --- Background Component with Orange Theme ---
 const DynamicBackground = () => (
   <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950 via-slate-950 to-black" />
@@ -45,7 +44,6 @@ const HostelDashboard = () => {
     }
   };
 
-  // Calculate statistics from real data
   const pendingCount = pendingPasses.length;
   const today = new Date().toDateString();
   const processedToday = pendingPasses.filter(pass => {
@@ -70,8 +68,6 @@ const HostelDashboard = () => {
       <GlobalHeader />
 
       <main className="container mx-auto px-4 py-24 md:py-32 relative z-10">
-        
-        {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
           <div>
             <div className="flex items-center gap-3 mb-2">
@@ -84,8 +80,6 @@ const HostelDashboard = () => {
               Manage residential permissions and approve local passes for students.
             </p>
           </div>
-          
-          {/* Date Widget */}
           <div className="hidden md:block text-right">
             <p className="text-3xl font-bold text-white">
               {new Date().toLocaleDateString('en-US', { day: 'numeric' })}
@@ -95,8 +89,6 @@ const HostelDashboard = () => {
             </p>
           </div>
         </div>
-
-        {/* --- STATS GRID --- */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {stats.map((stat, index) => (
             <div key={index} className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex items-center gap-4 hover:bg-slate-800/40 transition-colors">
@@ -110,11 +102,7 @@ const HostelDashboard = () => {
             </div>
           ))}
         </div>
-
-        {/* --- MAIN ACTION AREA --- */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          
-          {/* Primary Action Card (2/3 width) */}
           <div className="lg:col-span-2">
             <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               <Bell size={18} className="text-orange-400" /> Priority Actions
@@ -142,8 +130,6 @@ const HostelDashboard = () => {
                 </Link>
               </div>
             </div>
-
-            {/* Secondary Actions Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <button className="p-6 bg-slate-900/40 border border-white/10 rounded-2xl text-left hover:bg-slate-800/50 hover:border-white/20 transition-all group">
                 <Search className="text-slate-500 mb-3 group-hover:text-orange-400 transition-colors" size={24} />
@@ -158,8 +144,6 @@ const HostelDashboard = () => {
               </button>
             </div>
           </div>
-
-          {/* Sidebar Info (1/3 width) */}
           <div className="lg:col-span-1">
             <h2 className="text-lg font-bold text-white mb-4">Quick Stats</h2>
             <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6 space-y-6">

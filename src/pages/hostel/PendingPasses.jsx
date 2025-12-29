@@ -15,7 +15,6 @@ import { getPendingPasses, approvePass } from '../../services/hostel.service';
 import { formatDate, getPassTypeLabel } from '../../utils/helpers';
 import GlobalHeader from '../../components/common/GlobalHeader';
 
-// --- Dynamic Background with Orange Theme ---
 const DynamicBackground = () => (
   <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-950 via-slate-950 to-black" />
@@ -24,7 +23,6 @@ const DynamicBackground = () => (
   </div>
 );
 
-// --- Skeleton Loader ---
 const SkeletonCard = () => (
   <div className="bg-slate-900/40 border border-white/5 p-6 rounded-2xl animate-pulse">
     <div className="flex items-center gap-4 mb-4">
@@ -68,7 +66,6 @@ const PendingPasses = () => {
     try {
       setProcessing(passId);
       await approvePass(passId);
-      // Optimistic UI update
       setPasses((prev) => prev.filter((p) => p._id !== passId));
     } catch (err) {
       setError(err.message || 'Failed to approve pass.');
@@ -78,7 +75,6 @@ const PendingPasses = () => {
     }
   };
 
-  // Client-side filtering
   const filteredPasses = passes.filter(pass => 
     pass.student?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     pass.student?.rollNo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -91,8 +87,6 @@ const PendingPasses = () => {
       <GlobalHeader />
 
       <main className="container mx-auto px-4 py-24 md:py-32 relative z-10">
-        
-        {/* --- PAGE HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
           <div>
             <Link to="/hostel/dashboard" className="inline-flex items-center text-sm text-slate-500 hover:text-orange-400 mb-2 transition-colors">
@@ -103,8 +97,6 @@ const PendingPasses = () => {
               Reviewing local pass requests from students.
             </p>
           </div>
-
-          {/* Search Bar */}
           <div className="w-full md:w-auto relative group">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-orange-400 transition-colors" size={18} />
             <input 
@@ -116,16 +108,12 @@ const PendingPasses = () => {
             />
           </div>
         </div>
-
-        {/* --- ERROR MESSAGE --- */}
         {error && (
           <div className="mb-8 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center gap-3">
             <AlertCircle size={20} />
             <p>{error}</p>
           </div>
         )}
-
-        {/* --- CONTENT GRID --- */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => <SkeletonCard key={i} />)}
@@ -149,12 +137,9 @@ const PendingPasses = () => {
                 key={pass._id} 
                 className="group relative bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden hover:border-orange-500/30 hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-300"
               >
-                {/* Top Border Gradient - Orange Theme */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
                 <div className="p-6 flex flex-col h-full">
-                  
-                  {/* Header: Student & Dept */}
                   <div className="flex justify-between items-start mb-5">
                     <div className="flex gap-4">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-600 to-amber-700 flex items-center justify-center text-white font-bold text-lg shadow-inner">
@@ -171,16 +156,12 @@ const PendingPasses = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* Department Badge */}
                   <div className="mb-4">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/50 border border-white/5 text-xs text-slate-300">
                        <Building2 size={12} className="text-orange-400" />
                        <span className="font-medium">{pass.student?.department || 'General Dept'}</span>
                     </div>
                   </div>
-
-                  {/* Date Ticket */}
                   <div className="bg-slate-950/40 rounded-xl p-3 mb-4 border border-white/5 flex items-center gap-3">
                     <div className="p-2 bg-slate-900 rounded-lg text-orange-400">
                       <Calendar size={18} />
@@ -192,8 +173,6 @@ const PendingPasses = () => {
                       </span>
                     </div>
                   </div>
-
-                  {/* Reason Details */}
                   <div className="mb-6 flex-1">
                     <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-1">
                       <MapPin size={12} /> Reason
@@ -202,8 +181,6 @@ const PendingPasses = () => {
                       "{pass.reason || pass.reasonForLeave || 'No specific reason provided.'}"
                     </p>
                   </div>
-
-                  {/* Action Buttons */}
                   <div className="flex gap-3 mt-auto pt-4 border-t border-white/5">
                     <button 
                       className="flex-1 py-2.5 px-4 rounded-xl border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 font-medium text-sm transition-colors flex items-center justify-center gap-2 opacity-70 hover:opacity-100"

@@ -1,15 +1,5 @@
-/**
- * Helper Utility Functions
- * Reusable functions for formatting and data manipulation
- */
-
 import { PASS_TYPE_LABELS } from './constants';
 
-/**
- * Format date to readable string
- * @param {string} dateString - ISO date string
- * @returns {string} Formatted date string
- */
 export const formatDate = (dateString) => {
   if (!dateString) return 'N/A';
   const date = new Date(dateString);
@@ -22,11 +12,6 @@ export const formatDate = (dateString) => {
   });
 };
 
-/**
- * Get status badge color class
- * @param {string} status - Approval status
- * @returns {string} Tailwind CSS classes
- */
 export const getStatusColor = (status) => {
   switch (status) {
     case 'APPROVED':
@@ -40,21 +25,10 @@ export const getStatusColor = (status) => {
   }
 };
 
-/**
- * Get pass type label
- * @param {string} type - Pass type
- * @returns {string} Human-readable label
- */
 export const getPassTypeLabel = (type) => {
   return PASS_TYPE_LABELS[type] || type;
 };
 
-/**
- * Check if user has required role
- * @param {string} userRole - Current user role
- * @param {string[]} requiredRoles - Array of allowed roles
- * @returns {boolean} True if user has required role
- */
 export const hasRole = (userRole, requiredRoles) => {
   return requiredRoles.includes(userRole);
 };

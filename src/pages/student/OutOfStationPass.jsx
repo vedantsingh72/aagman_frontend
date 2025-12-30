@@ -1,16 +1,30 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { createPass } from '../../services/pass.service';
 import { PASS_TYPES } from '../../utils/constants';
 import ErrorMessage from '../../components/common/ErrorMessage';
 import Loading from '../../components/common/Loading';
+import GlobalHeader from '../../components/common/GlobalHeader';
+import { 
+  ArrowLeft, 
+  User, 
+  MapPin, 
+  Calendar, 
+  Phone, 
+  Home, 
+  Plane,
+  UserCircle
+} from 'lucide-react';
 
-/**
- * Out of Station Pass Form
- * Dedicated form for creating Out of Station gate passes
- * Department and year are auto-filled from student profile
- */
+const DynamicBackground = () => (
+  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950 via-slate-950 to-black" />
+    <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" />
+    <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[100px]" />
+  </div>
+);
+
 const OutOfStationPass = () => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
@@ -31,7 +45,6 @@ const OutOfStationPass = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Validate user has department
     if (user && !user.department) {
       setError('Please update your profile with department information first.');
     }
@@ -46,7 +59,6 @@ const OutOfStationPass = () => {
   };
 
   const validateForm = () => {
-    // Validate contact numbers are 10 digits
     if (formData.contactNumber && !/^\d{10}$/.test(formData.contactNumber)) {
       setError('Contact number must be exactly 10 digits');
       return false;
@@ -56,7 +68,6 @@ const OutOfStationPass = () => {
       return false;
     }
 
-    // Validate dates
     if (formData.fromDate && formData.toDate) {
       const from = new Date(formData.fromDate);
       const to = new Date(formData.toDate);
@@ -102,221 +113,230 @@ const OutOfStationPass = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-6">Create Out of Station Pass</h1>
+    <div className="min-h-screen font-sans text-slate-200 relative selection:bg-blue-500/30">
+      <DynamicBackground />
+      <GlobalHeader />
 
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <ErrorMessage message={error} />
-
-        {/* Student Info (Read-only) */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <h3 className="text-lg font-semibold mb-3">Student Information</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-600">Name</label>
-              <p className="text-gray-900 font-medium">{user?.name || 'N/A'}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-600">Roll Number</label>
-              <p className="text-gray-900 font-medium">{user?.rollNo || 'N/A'}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-600">Department</label>
-              <p className="text-gray-900 font-medium">{user?.department || 'Not set'}</p>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-600">Year</label>
-              <p className="text-gray-900 font-medium">{user?.year ? `${user.year}st Year` : 'Not set'}</p>
-            </div>
-          </div>
+      <main className="container mx-auto px-4 py-24 md:py-32 relative z-10 max-w-4xl">
+        
+        <div className="mb-8">
+          <Link to="/student/create-pass" className="inline-flex items-center text-sm text-slate-500 hover:text-blue-400 mb-4 transition-colors">
+            <ArrowLeft size={16} className="mr-1" /> Back to Create Pass
+          </Link>
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Out of Station Pass</h1>
+          <p className="text-slate-400 mt-2">
+            Complete the form below to request an out of station gate pass.
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Reason for Leave */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Reason for Leave *
-            </label>
-            <textarea
-              name="reasonForLeave"
-              value={formData.reasonForLeave}
-              onChange={handleChange}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter reason for leaving the station"
-              required
-            />
+        <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-8">
+          <ErrorMessage message={error} />
+
+          <div className="mb-8 p-6 bg-slate-950/50 rounded-xl border border-white/5">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <UserCircle size={20} className="text-blue-400" /> Student Information
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Name</label>
+                <p className="text-sm font-medium text-white">{user?.name || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Roll Number</label>
+                <p className="text-sm font-medium text-white">{user?.rollNo || 'N/A'}</p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Department</label>
+                <p className="text-sm font-medium text-white">{user?.department || 'Not set'}</p>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Year</label>
+                <p className="text-sm font-medium text-white">{user?.year ? `${user.year}st Year` : 'Not set'}</p>
+              </div>
+            </div>
           </div>
 
-          {/* Place Where Going */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Place Where Going *
-            </label>
-            <input
-              type="text"
-              name="placeWhereGoing"
-              value={formData.placeWhereGoing}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter destination"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                <MapPin size={16} /> Reason for Leave *
+              </label>
+              <textarea
+                name="reasonForLeave"
+                value={formData.reasonForLeave}
+                onChange={handleChange}
+                rows={4}
+                className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600 resize-none"
+                placeholder="Enter reason for leaving the station"
+                required
+              />
+            </div>
 
-          {/* From Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              From Date & Time *
-            </label>
-            <input
-              type="datetime-local"
-              name="fromDate"
-              value={formData.fromDate}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                <MapPin size={16} /> Place Where Going *
+              </label>
+              <input
+                type="text"
+                name="placeWhereGoing"
+                value={formData.placeWhereGoing}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600"
+                placeholder="Enter destination"
+                required
+              />
+            </div>
 
-          {/* To Date */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              To Date & Time *
-            </label>
-            <input
-              type="datetime-local"
-              name="toDate"
-              value={formData.toDate}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                  <Calendar size={16} /> From Date & Time *
+                </label>
+                <input
+                  type="datetime-local"
+                  name="fromDate"
+                  value={formData.fromDate}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  required
+                />
+              </div>
 
-          {/* Contact Number */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Contact Number (10 digits) *
-            </label>
-            <input
-              type="tel"
-              name="contactNumber"
-              value={formData.contactNumber}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter 10-digit contact number"
-              maxLength={10}
-              pattern="[0-9]{10}"
-              required
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                  <Calendar size={16} /> To Date & Time *
+                </label>
+                <input
+                  type="datetime-local"
+                  name="toDate"
+                  value={formData.toDate}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  required
+                />
+              </div>
+            </div>
 
-          {/* Guardian Contact Number */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Guardian Contact Number (10 digits) *
-            </label>
-            <input
-              type="tel"
-              name="guardianContactNumber"
-              value={formData.guardianContactNumber}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter guardian's 10-digit contact number"
-              maxLength={10}
-              pattern="[0-9]{10}"
-              required
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                  <Phone size={16} /> Contact Number (10 digits) *
+                </label>
+                <input
+                  type="tel"
+                  name="contactNumber"
+                  value={formData.contactNumber}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600"
+                  placeholder="Enter 10-digit number"
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  required
+                />
+              </div>
 
-          {/* Address During Leave */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Address During Leave *
-            </label>
-            <textarea
-              name="addressDuringLeave"
-              value={formData.addressDuringLeave}
-              onChange={handleChange}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter complete address where you will be staying"
-              required
-            />
-          </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                  <Phone size={16} /> Guardian Contact (10 digits) *
+                </label>
+                <input
+                  type="tel"
+                  name="guardianContactNumber"
+                  value={formData.guardianContactNumber}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600"
+                  placeholder="Guardian's 10-digit number"
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  required
+                />
+              </div>
+            </div>
 
-          {/* Travel Mode */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Travel Mode
-            </label>
-            <select
-              name="travelMode"
-              value={formData.travelMode}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select Travel Mode (Optional)</option>
-              <option value="Bus">Bus</option>
-              <option value="Train">Train</option>
-              <option value="Flight">Flight</option>
-              <option value="Personal">Personal Vehicle</option>
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                <Home size={16} /> Address During Leave *
+              </label>
+              <textarea
+                name="addressDuringLeave"
+                value={formData.addressDuringLeave}
+                onChange={handleChange}
+                rows={3}
+                className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600 resize-none"
+                placeholder="Enter complete address where you will be staying"
+                required
+              />
+            </div>
 
-          {/* Emergency Contact Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Emergency Contact Name
-            </label>
-            <input
-              type="text"
-              name="emergencyContactName"
-              value={formData.emergencyContactName}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter emergency contact name (optional)"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                <Plane size={16} /> Travel Mode
+              </label>
+              <select
+                name="travelMode"
+                value={formData.travelMode}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              >
+                <option value="">Select Travel Mode (Optional)</option>
+                <option value="Bus">Bus</option>
+                <option value="Train">Train</option>
+                <option value="Flight">Flight</option>
+                <option value="Personal">Personal Vehicle</option>
+              </select>
+            </div>
 
-          {/* Emergency Contact Relation */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Emergency Contact Relation
-            </label>
-            <input
-              type="text"
-              name="emergencyContactRelation"
-              value={formData.emergencyContactRelation}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="e.g., Father, Mother, Friend (optional)"
-            />
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                  <User size={16} /> Emergency Contact Name
+                </label>
+                <input
+                  type="text"
+                  name="emergencyContactName"
+                  value={formData.emergencyContactName}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600"
+                  placeholder="Optional"
+                />
+              </div>
 
-          {/* Buttons */}
-          <div className="flex gap-4 pt-4">
-            <button
-              type="submit"
-              disabled={loading || !user?.department}
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition font-medium disabled:opacity-50"
-            >
-              {loading ? 'Creating...' : 'Create Out of Station Pass'}
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate('/student/dashboard')}
-              className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                  <User size={16} /> Emergency Contact Relation
+                </label>
+                <input
+                  type="text"
+                  name="emergencyContactRelation"
+                  value={formData.emergencyContactRelation}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-slate-950 border border-white/10 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder:text-slate-600"
+                  placeholder="e.g., Father, Mother (optional)"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-4 pt-4">
+              <button
+                type="submit"
+                disabled={loading || !user?.department}
+                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-3 px-6 rounded-xl font-bold shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Creating...' : 'Create Out of Station Pass'}
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/student/dashboard')}
+                className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-3 px-6 rounded-xl font-medium transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
   );
 };
 
 export default OutOfStationPass;
-

@@ -12,6 +12,14 @@ export const getDepartmentLeaves = async () => {
   return await api.get('/api/academic/department-leaves');
 };
 
+export const getHistory = async () => {
+  return await api.get('/api/academic/history');
+};
+
+export const getStudentsOut = async () => {
+  return await api.get('/api/academic/students-out');
+};
+
 export const approvePass = async (passId) => {
   return await api.patch(`/api/academic/approve/${passId}`);
 };

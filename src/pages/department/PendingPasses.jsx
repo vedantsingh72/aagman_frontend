@@ -80,11 +80,20 @@ const PendingPasses = () => {
     pass.student?.rollNo?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+const DynamicBackground = () => (
+  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950 via-slate-950 to-black" />
+    <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px] animate-pulse" />
+    <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px]" />
+  </div>
+);
+
   return (
-    <div className="min-h-screen bg-[#0A0F1E] font-sans text-slate-200 selection:bg-indigo-500/30">
+    <div className="min-h-screen font-sans text-slate-200 relative selection:bg-indigo-500/30">
+      <DynamicBackground />
       <GlobalHeader />
 
-      <main className="container mx-auto px-4 py-24 md:py-32">
+      <main className="container mx-auto px-4 py-24 md:py-32 relative z-10">
         
         {/* --- PAGE HEADER --- */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">

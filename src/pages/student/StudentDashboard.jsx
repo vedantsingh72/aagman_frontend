@@ -1,87 +1,145 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext';
+import { 
+  Plus, 
+  FileText, 
+  Calendar,
+  ArrowRight,
+  User
+} from 'lucide-react';
+import GlobalHeader from '../../components/common/GlobalHeader';
 
-/**
- * Student Dashboard
- * Main dashboard for students to create and view passes
- */
+const DynamicBackground = () => (
+  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-950 via-slate-950 to-black" />
+    <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" />
+    <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[100px]" />
+  </div>
+);
+
 const StudentDashboard = () => {
   const { user } = useAuth();
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Student Dashboard</h1>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Create Pass Card */}
-        <Link
-          to="/student/create-pass"
-          className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer"
-        >
-          <div className="flex items-center space-x-4">
-            <div className="bg-blue-100 p-4 rounded-full">
-              <svg
-                className="w-8 h-8 text-blue-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+    <div className="min-h-screen font-sans text-slate-200 relative selection:bg-blue-500/30">
+      <DynamicBackground />
+      <GlobalHeader />
+
+      <main className="container mx-auto px-4 py-24 md:py-32 relative z-10">
+        
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider">
+                Student Portal
+              </span>
             </div>
-            <div>
-              <h2 className="text-xl font-semibold">Create New Pass</h2>
-              <p className="text-gray-600">Request a new gate pass</p>
+            <h1 className="text-4xl font-bold text-white tracking-tight">
+              Welcome, {user?.name || 'Student'}!
+            </h1>
+            <p className="text-slate-400 mt-2 max-w-xl">
+              Create and manage your gate passes for campus leave requests.
+            </p>
+          </div>
+          
+          <div className="hidden md:block text-right">
+            <p className="text-3xl font-bold text-white">
+              {new Date().toLocaleDateString('en-US', { day: 'numeric' })}
+            </p>
+            <p className="text-sm text-slate-400 uppercase tracking-widest">
+              {new Date().toLocaleDateString('en-US', { month: 'long', weekday: 'long' })}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Link
+            to="/student/create-pass"
+            className="group relative bg-gradient-to-br from-blue-900/40 to-slate-900/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-300"
+          >
+            <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
+            
+            <div className="relative p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-bold uppercase">
+                  <Plus size={12} /> New Request
+                </div>
+                <h3 className="text-2xl font-bold text-white">Create New Pass</h3>
+                <p className="text-slate-300 leading-relaxed max-w-lg">
+                  Request a new gate pass for local leave or outstation travel.
+                </p>
+              </div>
+
+              <div className="whitespace-nowrap flex items-center gap-2 px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-lg shadow-blue-500/20 transform group-hover:scale-105 transition-all">
+                Create <ArrowRight size={20} />
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            to="/student/my-passes"
+            className="group relative bg-gradient-to-br from-emerald-900/40 to-slate-900/40 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-all duration-300"
+          >
+            <div className="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors" />
+            
+            <div className="relative p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-bold uppercase">
+                  <FileText size={12} /> View History
+                </div>
+                <h3 className="text-2xl font-bold text-white">My Passes</h3>
+                <p className="text-slate-300 leading-relaxed max-w-lg">
+                  View all your gate passes, check approval status, and access QR codes.
+                </p>
+              </div>
+
+              <div className="whitespace-nowrap flex items-center gap-2 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold shadow-lg shadow-emerald-500/20 transform group-hover:scale-105 transition-all">
+                View <ArrowRight size={20} />
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-4 rounded-xl bg-blue-500/10 text-blue-400">
+                <User size={24} />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{user?.rollNo || 'N/A'}</p>
+                <p className="text-sm font-medium text-slate-400">Roll Number</p>
+              </div>
             </div>
           </div>
-        </Link>
 
-        {/* My Passes Card */}
-        <Link
-          to="/student/my-passes"
-          className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition cursor-pointer"
-        >
-          <div className="flex items-center space-x-4">
-            <div className="bg-green-100 p-4 rounded-full">
-              <svg
-                className="w-8 h-8 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold">My Passes</h2>
-              <p className="text-gray-600">View all your passes</p>
+          <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-4 rounded-xl bg-purple-500/10 text-purple-400">
+                <FileText size={24} />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{user?.department || 'N/A'}</p>
+                <p className="text-sm font-medium text-slate-400">Department</p>
+              </div>
             </div>
           </div>
-        </Link>
-      </div>
 
-      {/* Welcome Message */}
-      <div className="mt-8 bg-blue-50 p-6 rounded-lg">
-        <h2 className="text-xl font-semibold mb-2">
-          Welcome, {user?.name || 'Student'}!
-        </h2>
-        <p className="text-gray-700">
-          Use the options above to create a new gate pass or view your existing passes.
-        </p>
-      </div>
+          <div className="bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-4 rounded-xl bg-cyan-500/10 text-cyan-400">
+                <Calendar size={24} />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-white">{user?.year || 'N/A'}</p>
+                <p className="text-sm font-medium text-slate-400">Year</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
 
 export default StudentDashboard;
-
